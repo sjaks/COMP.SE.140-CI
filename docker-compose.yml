@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  httpserv:
+    image: mq/httpserv:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./httpserv
+    ports:
+      - "8080:8080"
+    networks:
+      - mqnet
+    volumes:
+      - mqlogs:/usr/app/logs
+  imed:
+    image: mq/imed:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./imed
+    networks:
+      - mqnet
+  obse:
+    image: mq/obse:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./obse
+    networks:
+      - mqnet
+    volumes:
+      - mqlogs:/usr/app/logs
+  orig:
+    image: mq/orig:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./orig
+    networks:
+      - mqnet
+  rabmq:
+    image: rabbitmq:3-management
+    expose:
+      - 5672
+    networks:
+      - mqnet
+
+networks:
+  mqnet:
+
+volumes:
+  mqlogs:
