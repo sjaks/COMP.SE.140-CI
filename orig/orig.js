@@ -17,8 +17,6 @@ function queueMessage(index) {
     }, index * 3000);
 }
 
-setTimeout(function() {
-    queueMessage(1);
-    queueMessage(2);
-    queueMessage(3);
-}, 7000);
+queueMessage(1);
+queueMessage(2);
+queueMessage(3);

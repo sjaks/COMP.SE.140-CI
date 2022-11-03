@@ -5,6 +5,10 @@ const fs = require('fs');
 
 var index = 1;
 
+function resetLog() {
+    fs.writeFileSync('./logs/log.txt', '');
+}
+
 function writeLog(message, topic) {
     let date = new Date().toISOString();
     let data = date + ' ' + index.toString() + ' ' + message + ' to ' + topic + '\n';
@@ -29,6 +33,5 @@ async function observeMessages() {
     });
 }
 
-setTimeout(function() {
-    observeMessages();
-}, 6000);
+resetLog();
+observeMessages();

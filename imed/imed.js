@@ -32,6 +32,4 @@ async function receiveMessages() {
     });
 }
 
-setTimeout(function() {
-    receiveMessages();
-}, 6000);
+receiveMessages();

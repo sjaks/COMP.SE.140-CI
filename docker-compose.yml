@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
   httpserv:
@@ -19,6 +19,9 @@ services:
       context: ./imed
     networks:
       - mqnet
+    depends_on:
+      rabmq:
+          condition: service_healthy
   obse:
     image: mq/obse:latest
     build:
@@ -28,6 +31,9 @@ services:
       - mqnet
     volumes:
       - mqlogs:/usr/app/logs
+    depends_on:
+      rabmq:
+        condition: service_healthy
   orig:
     image: mq/orig:latest
     build:
@@ -35,12 +41,20 @@ services:
       context: ./orig
     networks:
       - mqnet
+    depends_on:
+      rabmq:
+        condition: service_healthy
   rabmq:
     image: rabbitmq:3-management
     expose:
       - 5672
     networks:
       - mqnet
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 20s
+      retries: 5
 
 networks:
   mqnet:
