@@ -24,11 +24,11 @@ channel queues. I also learned to use Docker volumes a bit better.
 ### How to run
 ```
 $ git clone -b messaging git@course-gitlab.tuni.fi:compse140-2022-2023/jakonens.git
-$ docker-compose build –-no-cache
+$ cd jakonens
+$ docker-compose build --no-cache
 $ docker-compose up -d
 
 $ curl localhost:8080
-$ docker-compose down
 ```
 
 By running these commands (and waiting until the composition is up after docker-compose up),
