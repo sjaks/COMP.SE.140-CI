@@ -7,6 +7,11 @@ stages:
   - test
   - deploy
 
+before_script:
+  - apk update
+  - apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make
+  - pip install docker-compose
+
 lint-test:
   stage: test
   script:
@@ -15,11 +20,8 @@ lint-test:
 integration-test:
   stage: test
   script:
-    - sudo apt-get install -y python-pip
-    - sudo pip install docker-compose
-    - sudo docker image prune -f
-    - sudo docker-compose -f docker-compose.yml build --no-cache
-    - sudo docker-compose -f docker-compose.yml up -d
+    - docker-compose -f docker-compose.yml build --no-cache
+    - docker-compose -f docker-compose.yml up -d
 
 deploy-app:
   stage: deploy
