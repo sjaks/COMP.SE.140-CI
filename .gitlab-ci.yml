@@ -10,13 +10,14 @@ stages:
 
 before_script:
   - apk update
-  - apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make curl
+  - apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make curl npm
   - pip install docker-compose
+  - npm install -g eslint
 
 lint-test:
   stage: test
   script:
-    - echo "Running the linter"
+    - eslint .
 
 integration-test:
   stage: test
