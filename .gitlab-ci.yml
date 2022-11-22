@@ -11,17 +11,17 @@ stages:
 before_script:
   - apk update
   - apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make curl npm
-  - pip install docker-compose
-  - npm install -g eslint
 
 lint-test:
   stage: test
   script:
+    - npm install -g eslint
     - eslint .
 
 integration-test:
   stage: test
   script:
+    - pip install docker-compose
     - docker-compose -f docker-compose.yml build --no-cache
     - docker-compose -f docker-compose.yml up -d --remove-orphans
     - sleep 5
