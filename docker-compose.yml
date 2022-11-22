@@ -1,6 +1,15 @@
 version: "3.8"
 
 services:
+  api:
+    image: mq/api:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./api
+    ports:
+      - "8083:8083"
+    networks:
+      - mqnet
   httpserv:
     image: mq/httpserv:latest
     build:
