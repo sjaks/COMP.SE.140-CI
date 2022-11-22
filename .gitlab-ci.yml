@@ -1,6 +1,7 @@
-image: docker:latest
+image: docker:20.10.16
 services:
-  - docker:dind
+  - name: docker:20.10.16-dind
+    alias: dind-service
 
 stages:
   - lint
@@ -9,19 +10,22 @@ stages:
 
 before_script:
   - apk update
-  - apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make
+  - apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make curl
   - pip install docker-compose
 
-lint-test:
-  stage: test
-  script:
-    - echo "Running the linter"
+# lint-test:
+#   stage: test
+#   script:
+#     - echo "Running the linter"
 
 integration-test:
   stage: test
   script:
     - docker-compose -f docker-compose.yml build --no-cache
-    - docker-compose -f docker-compose.yml up -d
+    - docker-compose -f docker-compose.yml up -d --remove-orphans
+    - sleep 10
+    - chmod +x api/test/endpoints.sh
+    - ./api/test/endpoints.sh
 
 deploy-app:
   stage: deploy

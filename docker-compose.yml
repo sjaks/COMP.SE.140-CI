@@ -6,6 +6,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./api
+    expose:
+      - 8083
     ports:
       - "8083:8083"
     networks:
