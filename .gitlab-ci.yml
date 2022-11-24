@@ -25,8 +25,8 @@ integration-test:
     - docker-compose -f docker-compose.yml build --no-cache
     - docker-compose -f docker-compose.yml up -d --remove-orphans
     - sleep 15
-    - chmod +x api/test/endpoints.sh
-    - ./api/test/endpoints.sh
+    - chmod +x tests/endpoints.sh
+    - ./tests/endpoints.sh
 
 deploy-app:
   stage: deploy

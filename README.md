@@ -17,7 +17,7 @@ git clone -b project git@course-gitlab.tuni.fi:compse140-2022-2023/jakonens.git
 cd jakonens
 docker-compose build –-no-cache
 docker-compose up -d
-./api/test/endpoints.sh # move to ./tests
+./tests/endpoints.sh # move to ./tests
 ```
 
 ### Implemented optional features
