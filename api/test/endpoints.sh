@@ -19,10 +19,6 @@ curl -is -X PUT dind-service:8083/state -d RUNNING | grep '201' && echo 'SUCCESS
 curl -is dind-service:8083/state | grep 'RUNNING' && echo 'SUCCESS!'
 
 # GET run-log
-# curl -is dind-service:8083/run-log | grep '200' && echo 'SUCCESS!'
-
-# GET node-statistic
-# Optional
-
-# GET queue-statistic
-# Optional
+curl -is dind-service:8083/run-log | grep '200' && echo 'SUCCESS!'
+curl -is dind-service:8083/run-log | grep 'RUNNING' && echo 'SUCCESS!'
+curl -is dind-service:8083/run-log | grep 'PAUSED' && echo 'SUCCESS!'
