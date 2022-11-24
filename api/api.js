@@ -1,4 +1,16 @@
 const http = require('http');
+const amqp = require("amqplib");
+
+async function sendState(message) {
+    const url = 'amqp://rabmq:5672';
+    const connection = await amqp.connect(url);
+    const exchange = 'topic_exchange';
+    const type = 'topic';
+    const key = 'state.s';
+    let channel = await connection.createChannel();
+    await channel.assertExchange(exchange, type, {});
+    channel.publish(exchange, key, Buffer.from(JSON.stringify(message)), {});
+}
 
 const requestListener = function (req, res) {
     if (req.url === '/' && req.method === 'GET') {
@@ -19,7 +31,16 @@ const requestListener = function (req, res) {
 
         }).on('error', (err) => {
             res.writeHead(500, { 'Content-Type': 'text/plain' });
-            res.end('Backend error');
+            res.end(err);
+        });
+    } else if (req.url === '/state' && req.method === 'PUT') {
+        req.on('data', function(chunk) {
+            if (chunk.toString()) state = chunk.toString();
+            console.log('Received state change ' + state);
+            sendState(state);
+
+            res.writeHead(201, { 'Content-Type': 'text/plain' });
+            res.end(state);
         });
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
