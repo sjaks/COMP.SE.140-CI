@@ -27,7 +27,7 @@ Now the RESTful API can be queried with something like:
 ```
 curl localhost:8083/messages -H 'Content-Type: text/plain'
 curl localhost:8083/state -X put -d 'PAUSED' -H 'Content-Type: text/plain' -H 'Accept: text/plain'
-curl localhost:8083/state -H 'Content-Type: text/plain'
+curl localhost:8083/state -H 'Contegit addnt-Type: text/plain'
 curl localhost:8083/run-log -H 'Content-Type: text/plain'
 ```
 
@@ -36,14 +36,51 @@ Tests are run in GitLab CI but to manually run them locally:
 ./tests/endpoints.sh
 ```
 
+#### TODO: make tests runnable locally -> localhost parameter
+
 ## 2. Description of the CI/CD pipeline
-Briefly document all steps:
-- Version management; use of branches etc
-- Building tools
-- Testing; tools and test cases
-- Packing
-- Deployment
-- Operating; monitoring
+
+### Use of version management
+Gitlab.com was used as the main version management system. Since the GitLab instance provided by school did not
+provide GitLab Runners, another GitLab instance was hosted on my local machine.
+
+In both Git instances, a branch named project was used. It was treated as a development or feature branch as
+it is not the main branch of the project. Development was made in small commits where one commit usually
+corresponded with one medium-sized feature or a single fix. A test-driven approach was used, where tests were
+implemented according to the project API spec first - and then the feature based on the tests.
+
+### Building tools
+The program is implemented in mostly vanilla Javascript (Node.js) and the different services are installed with
+`npm install` with Docker. The different service containers are orchestrated with docker-compose so that the
+project can be built with `docker-compose build`.
+
+### Testing tools and cases
+The project is tested with simple Bash scripts found under `./tests`. There is one script at the moment, called `endpoints.sh` that tests the REST routes of the outside facing API. The following cases are tested. cURL is used for the HTTP requests.
+
+- GET `localhost:8083/` assert healthcheck `status code == 200`
+- GET `localhost:8083/` assert healthcheck `body == up`
+- GET `localhost:8083/messages` assert messages `status code == 200`
+- GET `localhost:8083/messages` assert messages `body == <date><test of the msg>`
+- GET `localhost:8083/state` assert state `status code == 200`
+- GET `localhost:8083/state` assert state `status == <state>`
+- PUT `localhost:8083/state` assert state `status code == 201`
+- PUT `localhost:8083/state` set state `state = <state>`
+
+The code is also linted with eslint, which is a simple form of dynamic testing.
+
+### Packing
+The project is packed using Docker. The different services are build into images by docker-compose.
+The containers could be published in the Docker Hub or transferred via Gitlab or Github in the future.
+
+### Deployment
+Currently the pipeline deploys the packages simply to the GitLab runner as the CI/CD pipeline runs
+a linter and the API (integration) tests after `docker-compose up`. There is also a deployment job
+in the pipeline that simulates the setting up and deployment of the project. It could be extended
+to automatically deploy the application to an outside server with, for instance, Ansible.
+
+### Operating
+The program can be operated with its API and a shutdown command can be used to turn it off.
+Docker-compose commands can be used for maintenance purposes.
 
 ## 3. Example runs of the pipeline
 
@@ -269,9 +306,17 @@ SUCCESS!
 Job succeeded
 ```
 
+#### TODO: add deployment job log
+
 ![](https://i.imgur.com/ywF13qN_d.webp?maxwidth=760&fidelity=grand)
 
 The different jobs in the CI pipeline
 
 ## 4. Reflection
-Self reflection here
+The main things I learned during this project include better understanding of
+a docker-compose orchestrated system and the use of GitLab CI. I was not
+familiar with the latter and it caused the most trouble during development.
+
+I used around 8 hours setting up the local GitLab and the Runner with
+working configurations and around 20 hours for the rest of the project.
+In total, around 28 hours were used.
