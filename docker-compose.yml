@@ -12,6 +12,8 @@ services:
       - "8083:8083"
     networks:
       - mqnet
+    environment:
+      - RABBITURL=amqp://rabmq:5672
   httpserv:
     image: mq/httpserv:latest
     build:
@@ -38,6 +40,8 @@ services:
     depends_on:
       rabmq:
           condition: service_healthy
+    environment:
+      - RABBITURL=amqp://rabmq:5672
   obse:
     image: mq/obse:latest
     build:
@@ -50,6 +54,8 @@ services:
     depends_on:
       rabmq:
         condition: service_healthy
+    environment:
+      - RABBITURL=amqp://rabmq:5672
   orig:
     image: mq/orig:latest
     build:
@@ -59,6 +65,8 @@ services:
       - mqnet
     depends_on:
       - obse
+    environment:
+      - RABBITURL=amqp://rabmq:5672
   rabmq:
     image: rabbitmq:3-management
     expose:

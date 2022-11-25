@@ -2,8 +2,7 @@ const http = require('http');
 const amqp = require("amqplib");
 
 async function sendState(message) {
-    const url = 'amqp://rabmq:5672';
-    const connection = await amqp.connect(url);
+    const connection = await amqp.connect(process.env.RABBITURL);
     const exchange = 'topic_exchange';
     const type = 'topic';
     const key = 'state.s';

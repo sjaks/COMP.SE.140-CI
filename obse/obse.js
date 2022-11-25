@@ -29,8 +29,7 @@ function writeStateLog(state) {
 }
 
 async function observeMessages() {
-    const url = 'amqp://rabmq:5672';
-    const connection = await amqp.connect(url);
+    const connection = await amqp.connect(process.env.RABBITURL);
     const exchange = 'topic_exchange';
     const type = 'topic';
     const key = 'compse140.*';
@@ -46,8 +45,7 @@ async function observeMessages() {
 }
 
 async function observeStateChanges() {
-    const url = 'amqp://rabmq:5672';
-    const connection = await amqp.connect(url);
+    const connection = await amqp.connect(process.env.RABBITURL);
     const exchange = 'topic_exchange';
     const type = 'topic';
     const key = 'state.b';

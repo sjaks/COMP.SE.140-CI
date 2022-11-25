@@ -4,8 +4,7 @@ var state = 'ERROR';
 var index = 1;
 
 async function sendMessage(message) {
-    const url = 'amqp://rabmq:5672';
-    const connection = await amqp.connect(url);
+    const connection = await amqp.connect(process.env.RABBITURL);
     const exchange = 'topic_exchange';
     const type = 'topic';
     const key = 'compse140.o';
@@ -16,8 +15,7 @@ async function sendMessage(message) {
 
 async function changeState(newState) {
     state = newState;
-    const url = 'amqp://rabmq:5672';
-    const connection = await amqp.connect(url);
+    const connection = await amqp.connect(process.env.RABBITURL);
     const exchange = 'topic_exchange';
     const type = 'topic';
     const key = 'state.b';
@@ -27,8 +25,7 @@ async function changeState(newState) {
 }
 
 async function receiveState() {
-    const url = 'amqp://rabmq:5672';
-    const connection = await amqp.connect(url);
+    const connection = await amqp.connect(process.env.RABBITURL);
     const exchange = 'topic_exchange';
     const type = 'topic';
     const key = 'state.s';
