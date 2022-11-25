@@ -21,6 +21,7 @@ const requestListener = function (req, res) {
             if (['INIT', 'RUNNING', 'PAUSED', 'SHUTDOWN'].includes(state)) {
 
                 if (state === 'SHUTDOWN') {
+                    // eslint-disable-next-line no-process-exit
                     process.exit(0);
                 }
 
