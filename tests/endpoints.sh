@@ -1,4 +1,3 @@
-#!/bin/bash
 # Test API endpoints with cURL
 # Usage:
 #   ./tests/endpoint.sh <hostname>

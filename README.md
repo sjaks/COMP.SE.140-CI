@@ -33,10 +33,8 @@ curl localhost:8083/run-log -H 'Content-Type: text/plain'
 
 Tests are run in GitLab CI but to manually run them locally:
 ```
-./tests/endpoints.sh
+./tests/endpoints.sh localhost
 ```
-
-#### TODO: make tests runnable locally -> localhost parameter
 
 ## 2. Description of the CI/CD pipeline
 
@@ -306,7 +304,106 @@ SUCCESS!
 Job succeeded
 ```
 
-#### TODO: add deployment job log
+
+### Successful deploy run
+```
+Running with gitlab-runner 15.5.1 (7178588d)
+Preparing the "docker" executor
+Using Docker executor with image docker:20.10.16 ...
+Starting service docker:20.10.16-dind ...
+Pulling docker image docker:20.10.16-dind ...
+Waiting for services to be up and running (timeout 30 seconds)...
+-- Redacted --
+2022-11-25T11:52:57.361709065Z Generating RSA private key, 4096 bit long modulus (2 primes)
+-- Redacted --
+2022-11-25T11:52:57.573170266Z Generating RSA private key, 4096 bit long modulus (2 primes)
+-- Redacted --
+Pulling docker image docker:20.10.16 ...
+-- Redacted --
+Getting source from Git repository
+Fetching changes with git depth set to 20...
+Reinitialized existing Git repository in /builds/gitlab-instance-f69c1852/jakonens/.git/
+Checking out 9f246fc9 as project...
+Skipping Git submodules setup
+Executing "step_script" stage of the job script
+-- Redacted --
+$ apk update
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.16/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.16/community/x86_64/APKINDEX.tar.gz
+v3.16.3-13-g4d933a1fa3 [https://dl-cdn.alpinelinux.org/alpine/v3.16/main]
+v3.16.3-15-gfba5fb8332 [https://dl-cdn.alpinelinux.org/alpine/v3.16/community]
+OK: 17050 distinct packages available
+$ apk add py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make curl npm
+(1/53) Upgrading musl (1.2.3-r0 -> 1.2.3-r2)
+(2/53) Upgrading libcrypto1.1 (1.1.1o-r0 -> 1.1.1s-r0)
+(3/53) Upgrading libssl1.1 (1.1.1o-r0 -> 1.1.1s-r0)
+-- Redacted --
+OK: 305 MiB in 71 packages
+$ pip install docker-compose
+Collecting docker-compose
+  Downloading docker_compose-1.29.2-py2.py3-none-any.whl (114 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 114.8/114.8 kB 8.9 MB/s eta 0:00:00
+-- Redacted --
+$ docker-compose -f docker-compose.yml build --no-cache
+#1 [mq/httpserv:latest internal] load build definition from Dockerfile
+#1 transferring dockerfile: 191B done
+#1 DONE 0.5s
+#2 [mq/obse:latest internal] load build definition from Dockerfile
+#2 transferring dockerfile: 203B done
+#2 DONE 0.5s
+-- Redacted --
+#12 [mq/api:latest 1/4] FROM docker.io/library/node:14@sha256:d82d512aec5de4fac53b92b2aa148948c2e72264d650de9e1570283d4f503dbe
+#12 sha256:2730d739afad9b8ff3e3029e23fd69d9533603751d6e42053ce0068c2b58e258 4.19MB / 50.45MB 0.4s
+#12 sha256:a122751b35336c158fc53a3bb03c6b11b414387589e5455e99baecdd803c6318 1.05MB / 7.86MB 0.5s
+#12 sha256:2730d739afad9b8ff3e3029e23fd69d9533603751d6e42053ce0068c2b58e258 14.68MB / 50.45MB 0.7s
+-- Redacted --
+#12 DONE 13.5s
+#18 [mq/api:latest 2/4] RUN mkdir /usr/app
+#18 DONE 0.5s
+#19 [mq/obse:latest 3/5] COPY . /usr/app
+#19 ...
+#20 [mq/httpserv:latest 3/4] COPY . /usr/app
+#20 DONE 0.3s
+-- Redacted --
+$ docker-compose -f docker-compose.yml up -d --remove-orphans
+rabmq Pulling 
+eaead16dc43b Pulling fs layer 
+d5e775568c00 Pulling fs layer 
+de99a1ffedd3 Pulling fs layer 
+32e52a38037e Pulling fs layer 
+01a79ee9a1ab Pulling fs layer 
+e704e07f62a6 Pulling fs layer 
+796a69cd2d92 Pulling fs layer 
+673d47469271 Pulling fs layer 
+cc0a988f4614 Pulling fs layer 
+32e52a38037e Waiting 
+15c6341064ed Pulling fs layer 
+01a79ee9a1ab Waiting 
+796a69cd2d92 Waiting 
+-- Redacted --
+32e52a38037e Download complete 
+de99a1ffedd3 Downloading [=======================>                           ]  24.26MB/52.3MB
+de99a1ffedd3 Downloading [==============================>                    ]  32.16MB/52.3MB
+de99a1ffedd3 Downloading [=======================================>           ]  41.12MB/52.3MB
+-- Redacted --
+Network jakonens_mqnet  Creating
+Network jakonens_mqnet  Created
+Volume "jakonens_mqlogs"  Creating
+Volume "jakonens_mqlogs"  Created
+Container jakonens-httpserv-1  Creating
+Container jakonens-rabmq-1  Creating
+Container jakonens-api-1  Creating
+-- Redacted --
+Container jakonens-obse-1  Starting
+Container jakonens-orig-1  Started
+Container jakonens-imed-1  Started
+Container jakonens-obse-1  Started
+$ echo "If we were to automate the deployment, it would happen here."
+If we were to automate the deployment, it would happen here.
+$ echo "The application could be deployed to a Linux server with Ansible."
+The application could be deployed to a Linux server with Ansible.
+Job succeeded
+```
 
 ![](https://i.imgur.com/ywF13qN_d.webp?maxwidth=760&fidelity=grand)
 
