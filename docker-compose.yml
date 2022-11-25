@@ -25,6 +25,9 @@ services:
       - mqnet
     volumes:
       - mqlogs:/usr/app/logs
+    depends_on:
+      rabmq:
+          condition: service_healthy
   imed:
     image: mq/imed:latest
     build:
@@ -55,8 +58,7 @@ services:
     networks:
       - mqnet
     depends_on:
-      rabmq:
-        condition: service_healthy
+      - obse
   rabmq:
     image: rabbitmq:3-management
     expose:

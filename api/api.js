@@ -19,11 +19,20 @@ const requestListener = function (req, res) {
     } else if (req.url === '/state' && req.method === 'PUT') {
         req.on('data', function(chunk) {
             if (chunk.toString()) { state = chunk.toString(); }
-            console.log('Received state change ' + state);
-            sendState(state);
+            if (['INIT', 'RUNNING', 'PAUSED', 'SHUTDOWN'].includes(state)) {
 
-            res.writeHead(201, { 'Content-Type': 'text/plain' });
-            res.end(state);
+                if (state === 'SHUTDOWN') {
+                    process.exit(0);
+                }
+
+                console.log('Received state change ' + state);
+                sendState(state);
+                res.writeHead(201, { 'Content-Type': 'text/plain' });
+                res.end(state);
+            } else {
+                res.writeHead(400, { 'Content-Type': 'text/plain' });
+                res.end('Invalid state');
+            }
         });
     } else if ((req.url === '/messages' || req.url === '/state' || req.url === '/run-log' ) && req.method === 'GET') {
         http.get('http://httpserv:8978' + req.url, (resp) => {

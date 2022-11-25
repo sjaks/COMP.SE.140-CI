@@ -20,7 +20,7 @@ Clone and run the project:
 git clone -b project git@course-gitlab.tuni.fi:compse140-2022-2023/jakonens.git 
 cd jakonens
 docker-compose build –-no-cache
-docker-compose up -d
+docker-compose up --exit-code-from api
 ```
 
 Now the RESTful API can be queried with something like:
